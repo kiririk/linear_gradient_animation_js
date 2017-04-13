@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by kiririk (http://jsbin.com/qepiqer/61/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>requestAnimationFrame</title>
+<style id="jsbin-css">
+body {
+	margin: 0;
+	background: linear-gradient(0deg, orange, red, purple) fixed;
+	height: 450px;
+}
+
+p {
+	margin: 10px;
+	font-family: arial;
+}
+
+input {
+	margin: 10px 10px 0 10px;
+	width: 200px;
+}
+</style>
+</head>
+<body id="main">
+	<input id="period-range" type="range" min="1" max="60" step="1" value="1">
+	<p id="oborot">Оборотов в минуту: 0</p>
+	<p id='deg'>0 deg</p>
+<script id="jsbin-javascript">
+var main = document.getElementById('main');
+var period_range_element = document.getElementById('period-range');
+var oborot_p = document.getElementById('oborot');
+var deg_p = document.getElementById('deg');
+
+var fps = 30; //частота кадров
+var deg = 0;
+var period_per_min = 1;
+period_range_element.value = period_per_min;
+
+period_range_element.oninput = function() {
+	period_per_min = period_range_element.value;
+}
+
+var time;
+function step() {
+	setTimeout(function() { //"обертка" setTimeout контролирует частоту кадров
+			requestAnimationFrame(step, main);
+			var now = new Date().getTime(),
+					dt = now - (time || now);
+			time = now;
+			
+			deg = deg%360
+			oborot_p.innerHTML = 'Обротов в минуту: '+period_per_min;
+			deg_p.innerHTML = deg.toFixed(3) + ' deg'
+			main.style.background = 'linear-gradient('+deg+'deg, orange, red, purple) fixed';
+			deg += ((period_per_min/10)/(1000/fps/2)) * dt;
+	}, 1000 / fps);
+}
+
+step();	//ЗАПУСК
+</script>
+</body>
+</html>
