@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by kiririk (http://jsbin.com/zogamiy/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+	<title>linear gradient</title>
+	<meta charset="utf-8">
+<style id="jsbin-css">
+html {
+	height: 100%;
+}
+body {
+	margin: 0;
+	background: linear-gradient(0deg, #C9FFE5, #FFBF00, grey) no-repeat;
+	height: 100%;
+}
+p {
+	margin: 10px;
+	font-family: arial;
+}
+input {
+	margin: 10px 10px 0 10px;
+}
+</style>
+</head>
+<body id="main">
+	<input id="period-range" type="range" min="1" max="60" step="1" value="0" oninput="changePeriod();">
+	<p id="per"></p>
+	<p id="angle"></p>
+	<p id="time"></p>
+<script id="jsbin-javascript">
+var period_per_min = 1; //установка "начальных" оборотов
+	var period_range_element = document.getElementById('period-range');
+	period_range_element.value = period_per_min;
+
+	function changePeriod() {
+		period_per_min = period_range_element.value;
+	}
+
+	var main = document.getElementById('main');
+	var per_p = document.getElementById('per');
+	var angle_p = document.getElementById('angle');
+	var time_p = document.getElementById('time');
+	var deg = 0;
+	
+	var fps = 20;
+	var start = Date.now();
+	var interval = setInterval(function() {
+		var timePassed = Date.now() - start;
+		angle_p.innerHTML = deg.toFixed(3) + ' deg';
+		time_p.innerHTML = timePassed/1000 + ' sec';
+		per_p.innerHTML = 'Обротов в минуту: ' + period_per_min;
+		deg = (period_per_min*6) * (timePassed/1000);
+		main.style.background = 'linear-gradient('+deg+'deg, #C9FFE5, #FFBF00, grey) fixed';
+		if (deg >= 360) {
+			start = Date.now();
+			deg = 0;
+		}
+	},1000/fps);
+</script>
+</body>
+</html>
